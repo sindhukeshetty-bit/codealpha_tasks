@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beautiful Modern Calculator</title>
+    <style>
+        /* --- Reset & Smooth Background --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a, #1e1b4b);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* --- Premium Container Design --- */
+        .calculator {
+            background: rgba(30, 30, 40, 0.75);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 28px;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            width: 340px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* --- Dynamic Display --- */
+        .screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: flex-end;
+            width: 100%;
+            height: 90px;
+            padding: 10px;
+            margin-bottom: 24px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        #history {
+            font-size: 1rem;
+            color: #64748b;
+            min-height: 20px;
+            word-wrap: break-word;
+            word-break: break-all;
+            text-align: right;
+            width: 100%;
+        }
+
+        #display {
+            width: 100%;
+            font-size: 2.4rem;
+            font-weight: 300;
+            color: #f8fafc;
+            text-align: right;
+            background: none;
+            border: none;
+            outline: none;
+        }
+
+        /* --- Layout Grid --- */
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        /* --- Sleek Button Styling --- */
+        button {
+            height: 60px;
+            border-radius: 16px;
+            border: none;
+            font-size: 1.3rem;
+            font-weight: 500;
+            cursor: pointer;
+            color: #e2e8f0;
+            background: rgba(255, 255, 255, 0.06);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        button:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        /* Specialized Color Theme Mapping */
+        .clear {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+        .clear:hover { background: rgba(239, 68, 68, 0.25); }
+
+        .operator {
+            background: rgba(99, 102, 241, 0.15);
+            color: #818cf8;
+            font-size: 1.5rem;
+        }
+        .operator:hover { background: rgba(99, 102, 241, 0.25); }
+
+        .equals {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: #fff;
+            grid-row: span 2;
+            height: auto;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+        .equals:hover {
+            background: linear-gradient(135deg, #4f46e5, #4338ca);
+            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculator">
+        <div class="screen">
+            <div id="history"></div>
+            <input type="text" id="display" readonly value="0">
+        </div>
+
+        <div class="buttons">
+            <button class="clear" onclick="clearDisplay()">C</button>
+            <button class="clear" onclick="backspace()">⌫</button>
+            <button class="operator" onclick="appendValue('/')">&divide;</button>
+            <button class="operator" onclick="appendValue('*')">&times;</button>
+            
+            <button onclick="appendValue('7')">7</button>
+            <button onclick="appendValue('8')">8</button>
+            <button onclick="appendValue('9')">9</button>
+            <button class="operator" onclick="appendValue('-')">-</button>
+            
+            <button onclick="appendValue('4')">4</button>
+            <button onclick="appendValue('5')">5</button>
+            <button onclick="appendValue('6')">6</button>
+            <button class="operator" onclick="appendValue('+')">+</button>
+            
+            <button onclick="appendValue('1')">1</button>
+            <button onclick="appendValue('2')">2</button>
+            <button onclick="appendValue('3')">3</button>
+            <button class="equals" onclick="calculate()">=</button>
+            
+            <button style="grid-column: span 2;" onclick="appendValue('0')">0</button>
+            <button onclick="appendValue('.')">.</button>
+        </div>
+    </div>
+
+    <script>
+        const display = document.getElementById('display');
+        const history = document.getElementById('history');
+        let shouldResetDisplay = false;
+
+        function appendValue(val) {
+            // Clears previous results instantly if you type a brand new number
+            if (display.value === '0' || shouldResetDisplay) {
+                if (!isNaN(val) || val === '.') {
+                    display.value = '';
+                }
+                shouldResetDisplay = false;
+            }
+            display.value += val;
+        }
+
+        function clearDisplay() {
+            display.value = '0';
+            history.textContent = '';
+        }
+
+        function backspace() {
+            if (display.value.length > 1) {
+                display.value = display.value.slice(0, -1);
+            } else {
+                display.value = '0';
+            }
+        }
+
+        function calculate() {
+            try {
+                let expression = display.value;
+                // Swap readable math signs back to programming logic signs
+                let formattedExpression = expression.replace(/&times;/g, '*').replace(/&divide;/g, '/');
+                
+                let result = eval(formattedExpression);
+                
+                // Show expression on top history line, answer on main screen
+                history.textContent = expression + ' =';
+                display.value = Number(result.toFixed(4)); // Rounds long decimals cleanly to 4 places
+                shouldResetDisplay = true;
+            } catch (error) {
+                display.value = 'Error';
+                shouldResetDisplay = true;
+            }
+        }
+    </script>
+</body>
+</html>
