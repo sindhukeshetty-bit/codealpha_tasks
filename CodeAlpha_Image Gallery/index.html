@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Image Gallery</title>
+    <style>
+        /* --- Reset & Base Styles --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f6;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        p.subtitle {
+            margin-bottom: 25px;
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        /* --- Category Filters --- */
+        .filter-buttons {
+            margin-bottom: 30px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: none;
+            background-color: #fff;
+            color: #333;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background-color: #e67e22;
+            color: #fff;
+        }
+
+        /* --- Layout: Responsive Grid --- */
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1400px;
+        }
+
+        /* --- Hover Effects & Smooth Transitions --- */
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            cursor: pointer;
+            height: 220px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.08);
+        }
+
+        /* Label tag overlay */
+        .item-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.75));
+            color: white;
+            padding: 15px;
+            font-size: 1rem;
+            font-weight: 500;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item:hover .item-label {
+            opacity: 1;
+        }
+
+        /* --- Lightbox (Popup View) --- */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .lightbox.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .lightbox-content {
+            max-width: 85%;
+            max-height: 80%;
+            border-radius: 8px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+        }
+
+        /* Lightbox Navigation Buttons */
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #fff;
+            font-size: 40px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .close-btn:hover { color: #e67e22; }
+
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #fff;
+            font-size: 50px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px 20px;
+            user-select: none;
+            transition: color 0.2s;
+        }
+
+        .nav-btn:hover { color: #e67e22; }
+        .prev-btn { left: 20px; }
+        .next-btn { right: 20px; }
+    </style>
+</head>
+<body>
+
+    <h1>Adorable Pets Gallery</h1>
+    <p class="subtitle">A beautiful grid of 20 lovely animals. Click to expand.</p>
+
+    <div class="filter-buttons">
+        <button class="filter-btn active" onclick="filterGallery('all')">All Pets (20)</button>
+        <button class="filter-btn" onclick="filterGallery('dogs')">Dogs</button>
+        <button class="filter-btn" onclick="filterGallery('cats')">Cats</button>
+        <button class="filter-btn" onclick="filterGallery('small-pets')">Small Animals</button>
+    </div>
+
+    <div class="gallery-container">
+        
+        <div class="gallery-item" data-category="dogs">
+            <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=600" alt="Golden Retriever">
+            <div class="item-label">Golden Retriever</div>
+        </div>
+        <div class="gallery-item" data-category="dogs">
+            <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=600" alt="French Bulldog">
+            <div class="item-label">French Bulldog</div>
+        </div>
+        <div class="gallery-item" data-category="dogs">
+            <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?w=600" alt="Labrador Retriever">
+            <div class="item-label">Labrador Retriever</div>
+        </div>
+        <div class="gallery-item" data-category="dogs">
+            <img src="https://images.unsplash.com/photo-1517849845537-4d257902454a?w=600" alt="Pug">
+            <div class="item-label">Playful Pug</div>
+        </div>
+        <div class="gallery-item" data-category="dogs">
+            <img src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=600" alt="Siberian Husky">
+            <div class="item-label">Siberian Husky</div>
+        </div>
+        <div class="gallery-item" data-category="dogs">
+            <img src="https://images.unsplash.com/photo-1544568100-847a948585b9?w=600" alt="German Shepherd">
+            <div class="item-label">German Shepherd</div>
+        </div>
+        <div class="gallery-item" data-category="dogs">
+            <img src="https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=600" alt="Corgi">
+            <div class="item-label">Welsh Corgi</div>
+        </div>
+
+        <div class="gallery-item" data-category="cats">
+            <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=600" alt="Tabby Cat">
+            <div class="item-label">Tabby Cat</div>
+        </div>
+        <div class="gallery-item" data-category="cats">
+            <img src="https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=600" alt="Siamese Cat">
+            <div class="item-label">Siamese Cat</div>
+        </div>
+        <div class="gallery-item" data-category="cats">
+            <img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=600" alt="Ginger Cat">
+            <div class="item-label">Ginger Cat</div>
+        </div>
+        <div class="gallery-item" data-category="cats">
+            <img src="https://images.unsplash.com/photo-1592194996308-7b43878e84a6?w=600" alt="Kitten">
+            <div class="item-label">Calico Kitten</div>
+        </div>
+        <div class="gallery-item" data-category="cats">
+            <img src="https://images.unsplash.com/photo-1495360010541-f48722b34f7d?w=600" alt="Sleeping Cat">
+            <div class="item-label">Sleepy Cat</div>
+        </div>
+        <div class="gallery-item" data-category="cats">
+            <img src="https://images.unsplash.com/photo-1561948955-570b270e7c36?w=600" alt="White Cat">
+            <div class="item-label">Elegant Persian</div>
+        </div>
+        <div class="gallery-item" data-category="cats">
+            <img src="https://images.unsplash.com/photo-1533743983669-94fa5c4338ec?w=600" alt="Playful Cat">
+            <div class="item-label">Playful Domestic Shorthair</div>
+        </div>
+
+        <div class="gallery-item" data-category="small-pets">
+            <img src="https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?w=600" alt="Rabbit">
+            <div class="item-label">Fluffy Bunny</div>
+        </div>
+        <div class="gallery-item" data-category="small-pets">
+            <img src="https://images.unsplash.com/photo-1548767797-d8c844163c4c?w=600" alt="Hamster">
+            <div class="item-label">Cute Hamster</div>
+        </div>
+        <div class="gallery-item" data-category="small-pets">
+            <img src="https://images.unsplash.com/photo-1520038410233-7141be7e6f97?w=600" alt="Parrot">
+            <div class="item-label">Colorful Budgie</div>
+        </div>
+
+    </div>
+
+    <div class="lightbox" id="lightbox">
+        <span class="close-btn" id="closeBtn">&times;</span>
+        <button class="nav-btn prev-btn" id="prevBtn">&#10094;</button>
+        <img src="" alt="Popup view" class="lightbox-content" id="lightboxImg">
+        <button class="nav-btn next-btn" id="nextBtn">&#10095;</button>
+    </div>
+
+    <script>
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const closeBtn = document.getElementById('closeBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        
+        let currentIndex = 0;
+        let activeImages = [];
+
+        function updateActiveImages() {
+            activeImages = [];
+            galleryItems.forEach(item => {
+                if (item.style.display !== 'none') {
+                    activeImages.push(item.querySelector('img').src);
+                }
+            });
+        }
+        updateActiveImages();
+
+        // Open Lightbox
+        galleryItems.forEach((item) => {
+            item.addEventListener('click', () => {
+                const imgSrc = item.querySelector('img').src;
+                currentIndex = activeImages.indexOf(imgSrc);
+                showImage(currentIndex);
+                lightbox.classList.add('active');
+            });
+        });
+
+        function showImage(index) {
+            lightboxImg.src = activeImages[index];
+        }
+
+        // Navigation controls
+        nextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentIndex = (currentIndex + 1) % activeImages.length;
+            showImage(currentIndex);
+        });
+
+        prevBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentIndex = (currentIndex - 1 + activeImages.length) % activeImages.length;
+            showImage(currentIndex);
+        });
+
+        closeBtn.addEventListener('click', () => { lightbox.classList.remove('active'); });
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) { lightbox.classList.remove('active'); }
+        });
+
+        // Interactive Filter Management
+        function filterGallery(category) {
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            window.event.target.classList.add('active');
+
+            galleryItems.forEach(item => {
+                const itemCategory = item.getAttribute('data-category');
+                if (category === 'all' || itemCategory === category) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            updateActiveImages();
+        }
+    </script>
+</body>
+</html>
