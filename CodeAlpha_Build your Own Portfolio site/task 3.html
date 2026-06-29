@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <style>
+        /* Base Setup & Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: #fcfcfc;
+            color: #333;
+        }
+
+        /* Sticky Navigation Bar */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #fff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            z-index: 100;
+        }
+
+        nav .logo {
+            font-weight: bold;
+            font-size: 1.3rem;
+            color: #2b5a9e;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #2b5a9e;
+        }
+
+        /* Generic Section Styles */
+        section {
+            padding: 100px 20px 80px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        /* Hero / About Section */
+        #about {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding-top: 150px;
+        }
+
+        #about h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        #about p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        /* Skills Layout */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            text-align: center;
+        }
+
+        .skill-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            font-weight: bold;
+            border-bottom: 3px solid #2b5a9e;
+            transition: transform 0.3s;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Projects Layout */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .project-card {
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .project-info {
+            padding: 20px;
+        }
+
+        .project-info h3 {
+            margin-bottom: 10px;
+        }
+
+        /* Contact Section */
+        #contact form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        #contact input, #contact textarea {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        #contact button {
+            background-color: #2b5a9e;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+
+        #contact button:hover {
+            background-color: #1e3f70;
+        }
+
+        /* Responsiveness Styling */
+        @media (max-width: 600px) {
+            #about h1 { font-size: 2.2rem; }
+            nav ul { gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">MyPortfolio.</div>
+        <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section id="about">
+        <h1>Hi, I'm a Developer</h1>
+        <p>Welcome to my personal workspace showcase. I enjoy building sleek interfaces, writing clean code, and creating solutions for the web.</p>
+    </section>
+
+    <section id="skills">
+        <h2 class="section-title">My Technical Skills</h2>
+        <div class="skills-grid">
+            <div class="skill-card">HTML5</div>
+            <div class="skill-card">CSS3 Layouts</div>
+            <div class="skill-card">JavaScript ES6</div>
+            <div class="skill-card">Responsive Design</div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <h2 class="section-title">Featured Projects</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <img src="https://picsum.photos/id/1/400/200" alt="Project 1" style="width:100%;">
+                <div class="project-info">
+                    <h3>Interactive Image Gallery</h3>
+                    <p>Built with HTML, CSS Grid, and lightboxes for responsive display.</p>
+                </div>
+            </div>
+            <div class="project-card">
+                <img src="https://picsum.photos/id/2/400/200" alt="Project 2" style="width:100%;">
+                <div class="project-info">
+                    <h3>Frontend Layout Task</h3>
+                    <p>A collection of mini responsive development web elements.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2 class="section-title">Get In Touch</h2>
+        <form onsubmit="alert('Message Sent!'); return false;">
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Your Email" required>
+            <textarea rows="5" placeholder="Your Message" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+    </section>
+
+</body>
+</html>
